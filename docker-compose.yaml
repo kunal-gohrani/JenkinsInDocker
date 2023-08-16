@@ -10,9 +10,27 @@ services:
     volumes:
       - jenkins-data:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - jenkins
+  
+  agent:
+    build:
+      context: .
+      dockerfile: jenkins-agent.Dockerfile
+    container_name: jenkinsagent
+    env_file:
+      - jenkins-agent.env
+    networks:
+      - jenkins
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - jenkins-agent-data:/home/jenkins
+    
+    
       
 volumes:
   jenkins-data:
+  jenkins-agent-data:
 
 networks:
   jenkins:
